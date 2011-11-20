@@ -5,7 +5,7 @@ import android.graphics.Point;
 
 public class Player {
 
-	private String name;
+	private String name="---";
 	private Paint paint = new Paint();
 	private Point point = new Point(0, 0);
 	private int color;

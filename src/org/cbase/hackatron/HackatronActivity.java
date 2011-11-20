@@ -95,7 +95,7 @@ public class HackatronActivity extends Activity {
 					cancel(true);
 				}
 				Log.d("hackatron", "got username: " + username);
-				
+				tv.getPlayer(mySlot).setName(username);
 			} else if (l.equals("1")) {
 				Log.d("hackatron",  username +"@"+ mySlot + " goes left");
 				tv.player_left(mySlot);
