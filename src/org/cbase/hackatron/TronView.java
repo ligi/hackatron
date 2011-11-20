@@ -23,6 +23,13 @@ public class TronView extends View implements Runnable {
 	private static final int[] COLORS = { Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW };
 	private static final byte PLAYER_COUNT=4;
 
+	private static int[][] CONTROLS = {
+			{KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_CENTER},
+			{KeyEvent.KEYCODE_X, KeyEvent.KEYCODE_V, KeyEvent.KEYCODE_C},
+			{KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_R, KeyEvent.KEYCODE_E},
+			{KeyEvent.KEYCODE_I, KeyEvent.KEYCODE_P, KeyEvent.KEYCODE_O},
+			};
+
 	private Player[] players;
 
 	private int buff_width=0;
@@ -94,8 +101,6 @@ public class TronView extends View implements Runnable {
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-
-
 		center_logo=relative2View(this,BitmapFactory.decodeResource(this.getResources(),R.drawable.logo),0.7f,0.0f);
 		buff_width=w/divider;
 		buff_height=h/divider;
@@ -106,7 +111,6 @@ public class TronView extends View implements Runnable {
 
 		super.onSizeChanged(w, h, oldw, oldh);
 	}
-
 
 	private void kill_player(int player) {
 		Log.i("hackatron","killing player" + player);
@@ -143,7 +147,6 @@ public class TronView extends View implements Runnable {
 				p.setPosition(buff_width - buff_width / 20, buff_height - buff_height / 20);
 
 				break;
-
 			}
 		}
 	}
@@ -170,65 +173,27 @@ public class TronView extends View implements Runnable {
 		getPlayer(player).turnLeft();
 	}
 
-	
 	public void player_start(int player) {
 		getPlayer(player).setActive(true);
 	}
-
-	private void player_active(int player) {
-		getPlayer(player).setActive(true);
-	}
-
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		Log.i("hackatron","key event");
 		switch (event.getAction()) {
 		case KeyEvent.ACTION_DOWN:
-			switch (event.getKeyCode()) {
-			case KeyEvent.KEYCODE_DPAD_RIGHT:
-				player_right(0); 
-				break;
-			case KeyEvent.KEYCODE_DPAD_LEFT:
-				player_left(0);
-				break;
-			case KeyEvent.KEYCODE_DPAD_CENTER:
-				player_active(0);
-				break;
-
-			case KeyEvent.KEYCODE_X:
-				player_right(1);
-				break;
-
-			case KeyEvent.KEYCODE_V:
-				player_left(1);
-				break;
-
-			case KeyEvent.KEYCODE_C:
-				player_active(1);
-				break;
-
-			case KeyEvent.KEYCODE_W:
-				player_right(2);
-				break;
-			case KeyEvent.KEYCODE_R:
-				player_left(2);
-				break;
-			case KeyEvent.KEYCODE_E:
-				player_active(2);
-				break;
-
-			case KeyEvent.KEYCODE_I:
-				player_right(3);
-				break;
-
-			case KeyEvent.KEYCODE_P:
-				player_left(3);
-				break;
-
-			case KeyEvent.KEYCODE_O:
-				player_active(3);
-				break;
+			int code = event.getKeyCode();
+			for (int p = 0; p < CONTROLS.length; p++) {
+				for (int keycode = 0; keycode < CONTROLS[p].length; keycode++) {
+					if (code == CONTROLS[p][keycode]) {
+						Player player = getPlayer(p);
+						switch (keycode) {
+							case 0: player.turnRight();break;
+							case 1: player.turnLeft();break;
+							case 2: player.setActive(true);break;
+						}
+					}
+				}
 			}
 			break;
 		}
@@ -333,8 +298,6 @@ public class TronView extends View implements Runnable {
 			}
 		}
 	}
-	
-	
-	
+
 
 }
