@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,7 +13,7 @@ import android.view.View;
 public class TronView extends View implements Runnable{
 
 	
-	public final static byte PLAYER_COUNT=2;
+	public final static byte PLAYER_COUNT=4;
 	
 	private final static byte PLAYER_MOVEMENT_NONE=-1;
 	private final static byte PLAYER_MOVEMENT_UP=0;
@@ -43,17 +42,21 @@ public class TronView extends View implements Runnable{
 		tron_buff=new int[buff_width][buff_height];
 		
 		player_position=new Point[PLAYER_COUNT];
-		player_position[0]=new Point(0,0);
+		player_paint=new Paint[PLAYER_COUNT];
 		player_position[1]=new Point(0,0);
 		
 		
-		player_paint=new Paint[PLAYER_COUNT];
 		
-		player_paint[0]=new Paint();
+		for (int act_player=0;act_player<PLAYER_COUNT;act_player++) {
+			player_position[act_player]=new Point(0,0);
+			player_paint[act_player]=new Paint();
+		}
+
 		player_paint[0].setColor(Color.RED);
-		
-		player_paint[1]=new Paint();
 		player_paint[1].setColor(Color.GREEN);
+		player_paint[2].setColor(Color.BLUE);
+		player_paint[3].setColor(Color.YELLOW);
+
 		
 		act_player_movement=new byte[PLAYER_COUNT];
 		
@@ -77,13 +80,23 @@ public class TronView extends View implements Runnable{
 				tron_buff[x][y]=-1;
 
 		act_player_movement[0]=PLAYER_MOVEMENT_RIGHT;
-		act_player_movement[1]=PLAYER_MOVEMENT_LEFT;
+		act_player_movement[1]=PLAYER_MOVEMENT_DOWN;
+
+		act_player_movement[2]=PLAYER_MOVEMENT_UP;
+		act_player_movement[3]=PLAYER_MOVEMENT_LEFT;
 		
 		player_position[0].x=buff_width/20;
-		player_position[0].y=buff_width/20;
+		player_position[0].y=buff_height/20;
 
 		player_position[1].x=buff_width-buff_width/20;
-		player_position[1].y=buff_width/20;
+		player_position[1].y=buff_height/20;
+
+		player_position[2].x=buff_width/20;
+		player_position[2].y=buff_height-buff_height/20;
+
+		player_position[3].x=buff_width-buff_width/20;
+		player_position[3].y=buff_height-buff_height/20;
+
 	}
 	
 	@Override
@@ -98,6 +111,12 @@ public class TronView extends View implements Runnable{
 			case KeyEvent.KEYCODE_DPAD_LEFT:
 				act_player_movement[0]=(byte)((act_player_movement[0]+4-1)%4);
 				break;
+			case KeyEvent.KEYCODE_A:
+				act_player_movement[1]=(byte)((act_player_movement[1]+1)%4);
+				break;
+			case KeyEvent.KEYCODE_D:
+				act_player_movement[1]=(byte)((act_player_movement[1]+4-1)%4);
+				break;
 			}
 			break;
 		}
@@ -108,12 +127,13 @@ public class TronView extends View implements Runnable{
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.BLACK);
 		for(int x=0;x<buff_width;x++)
-			for(int y=0;y<buff_height;y++)
-				if (tron_buff[x][y]!=-1)
-					canvas.drawRect(new Rect(x*divider,y*divider,(x+1)*divider,(y+1)*divider),player_paint[tron_buff[x][y]]);
+			for(int y=0;y<buff_height;y++) {
+				int val=tron_buff[x][y];
+				if (val!=-1)
+					canvas.drawRect(new Rect(x*divider,y*divider,(x+1)*divider,(y+1)*divider),player_paint[val]);
 		
-		
-		
+			}
+				
 		super.onDraw(canvas);
 		try {
 			Thread.sleep(20);
