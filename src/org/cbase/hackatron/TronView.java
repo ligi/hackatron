@@ -1,10 +1,5 @@
 package org.cbase.hackatron;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -205,20 +200,36 @@ public class TronView extends View implements Runnable {
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.BLACK);
 
-		mPlayerPaint.setColor(Color.RED);
-		
-		mPlayerPaint.setTextAlign(Align.LEFT);
-		mPlayerPaint.setTextSize(this.getHeight()/30);
-		
-		canvas.drawText(getPlayer(0).getName(), 100, 100, mPlayerPaint);
-		
-		mPlayerPaint.setTextAlign(Align.RIGHT);
-		mPlayerPaint.setColor(Color.YELLOW);
-		
-		canvas.drawText(getPlayer(1).getName(), this.getWidth()-100,100, mPlayerPaint);
-		
-		
-		
+		for (int player = 0; player < PLAYER_COUNT; player++) {
+			Player p = getPlayer(player);
+			mPlayerPaint.setColor(p.getColor());
+			mPlayerPaint.setTextSize(this.getHeight()/30);
+			Align align = Align.LEFT;
+			int textX =100;
+			int textY = 100;
+			switch (player) {
+				case 0:
+					align = Align.LEFT;
+					break;
+				case 1:
+					align = Align.RIGHT;
+					textX = this.getWidth()-100;
+					break;
+				case 2:
+					align = Align.RIGHT;
+					textX = this.getWidth()-100;
+					textY = this.getHeight() - this.getHeight()/30 - 100;
+					break;
+				case 3:
+					align = Align.LEFT;
+					textX = this.getWidth()-100;
+					textY = this.getHeight() - this.getHeight()/30 - 100;
+					break;
+			}
+			mPlayerPaint.setTextAlign(align);
+			canvas.drawText(p.getName() + " " + player, textX, textY,mPlayerPaint);
+		}
+
 		canvas.drawBitmap(center_logo, (this.getWidth() - center_logo.getWidth()) / 2, (this.getHeight() - center_logo.getHeight()) / 2, new Paint());
 		
 		Paint ip_text_paint=new Paint();
