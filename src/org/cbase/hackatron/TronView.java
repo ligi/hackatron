@@ -14,7 +14,7 @@ import android.view.View;
 public class TronView extends View implements Runnable{
 
 	
-	public final static byte PLAYER_COUNT=1;
+	public final static byte PLAYER_COUNT=2;
 	
 	private final static byte PLAYER_MOVEMENT_NONE=-1;
 	private final static byte PLAYER_MOVEMENT_UP=0;
@@ -44,6 +44,7 @@ public class TronView extends View implements Runnable{
 		
 		player_position=new Point[PLAYER_COUNT];
 		player_position[0]=new Point(0,0);
+		player_position[1]=new Point(0,0);
 		
 		
 		player_paint=new Paint[PLAYER_COUNT];
@@ -51,12 +52,12 @@ public class TronView extends View implements Runnable{
 		player_paint[0]=new Paint();
 		player_paint[0].setColor(Color.RED);
 		
+		player_paint[1]=new Paint();
+		player_paint[1].setColor(Color.GREEN);
+		
 		act_player_movement=new byte[PLAYER_COUNT];
 		
-		act_player_movement[0]=PLAYER_MOVEMENT_RIGHT;
-		
 		new Thread(this).start();
-		
 	}
 
 	@Override
@@ -75,9 +76,14 @@ public class TronView extends View implements Runnable{
 			for(int y=0;y<buff_height;y++)
 				tron_buff[x][y]=-1;
 
+		act_player_movement[0]=PLAYER_MOVEMENT_RIGHT;
+		act_player_movement[1]=PLAYER_MOVEMENT_LEFT;
 		
 		player_position[0].x=buff_width/20;
 		player_position[0].y=buff_width/20;
+
+		player_position[1].x=buff_width-buff_width/20;
+		player_position[1].y=buff_width/20;
 	}
 	
 	@Override
