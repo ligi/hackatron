@@ -14,6 +14,32 @@ import android.view.View;
 
 public class TronView extends View implements Runnable{
 
+	private static final int[] COLORS = { Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW };
+	private static final byte PLAYER_COUNT=4;
+
+	private Player[] players;
+
+	private int buff_width=0;
+	private int buff_height=0;
+	private int[][] tron_buff;
+	private Bitmap center_logo;
+	private final static byte divider=5;
+
+	private boolean running =true;
+
+	public TronView(Context context) {
+		super(context);
+
+		tron_buff=new int[buff_width][buff_height];
+
+		players = new Player[PLAYER_COUNT];
+		for (int i = 0; i < players.length; i++) {
+			players[i] = new Player();
+			players[i].setColor(COLORS[i]);
+		}
+
+		new Thread(this).start();
+	}
 
 	public static Bitmap relative2View(View view,Bitmap orig, float x_scale_, float y_scale_) {
 		// create a matrix for the manipulation
@@ -37,38 +63,6 @@ public class TronView extends View implements Runnable{
 		matrix.postScale(x_scale, y_scale);
 
 		return Bitmap.createBitmap(orig, 0, 0, orig.getWidth(),orig.getHeight(), matrix, true);
-	}
-
-	private Bitmap center_logo;
-
-	public final static byte PLAYER_COUNT=4;
-
-	private final static byte divider=5;
-
-	private int[][] tron_buff;
-
-	private int buff_width=0;
-	private int buff_height=0;
-
-	private boolean running =true;
-
-	private Paint logo_paint=new Paint();
-
-	private int[] player_colors = { Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW };
-	private Player[] players;
-
-	public TronView(Context context) {
-		super(context);
-
-		tron_buff=new int[buff_width][buff_height];
-
-		players = new Player[PLAYER_COUNT];
-		for (int i = 0; i < players.length; i++) {
-			players[i] = new Player();
-			players[i].setColor(player_colors[i]);
-		}
-
-		new Thread(this).start();
 	}
 
 	@Override
