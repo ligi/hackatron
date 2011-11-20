@@ -74,28 +74,62 @@ public class TronView extends View implements Runnable{
 		super.onSizeChanged(w, h, oldw, oldh);
 	}
 
+	
+	private void kill_player(int player) {
+		Log.i("hackatron","killing player" + player);
+		for(int x=0;x<buff_width;x++)
+			for(int y=0;y<buff_height;y++)
+				if (tron_buff[x][y]==player)
+					tron_buff[x][y]=-1;
+		
+		init_player(player) ;
+	}
+	
+	private void init_player(int player) {
+		switch (player) {
+		case 0:
+			act_player_movement[0]=PLAYER_MOVEMENT_RIGHT;	
+
+			player_position[0].x=buff_width/20;
+			player_position[0].y=buff_height/20;
+			break;
+			
+		case 1:
+			act_player_movement[1]=PLAYER_MOVEMENT_DOWN;
+
+			player_position[1].x=buff_width-buff_width/20;
+			player_position[1].y=buff_height/20;
+
+			break;
+
+		case 2:
+			act_player_movement[2]=PLAYER_MOVEMENT_UP;
+
+			player_position[2].x=buff_width/20;
+			player_position[2].y=buff_height-buff_height/20;
+
+			break;
+
+		case 3:
+			act_player_movement[3]=PLAYER_MOVEMENT_LEFT;
+
+			player_position[3].x=buff_width-buff_width/20;
+			player_position[3].y=buff_height-buff_height/20;
+
+
+			break;
+
+		}
+	}
+	
 	private void init() {
 		for(int x=0;x<buff_width;x++)
 			for(int y=0;y<buff_height;y++)
 				tron_buff[x][y]=-1;
 
-		act_player_movement[0]=PLAYER_MOVEMENT_RIGHT;
-		act_player_movement[1]=PLAYER_MOVEMENT_DOWN;
+		for (int act_player=0;act_player<PLAYER_COUNT;act_player++) 
+			init_player(act_player);
 
-		act_player_movement[2]=PLAYER_MOVEMENT_UP;
-		act_player_movement[3]=PLAYER_MOVEMENT_LEFT;
-		
-		player_position[0].x=buff_width/20;
-		player_position[0].y=buff_height/20;
-
-		player_position[1].x=buff_width-buff_width/20;
-		player_position[1].y=buff_height/20;
-
-		player_position[2].x=buff_width/20;
-		player_position[2].y=buff_height-buff_height/20;
-
-		player_position[3].x=buff_width-buff_width/20;
-		player_position[3].y=buff_height-buff_height/20;
 
 	}
 	
@@ -150,7 +184,7 @@ public class TronView extends View implements Runnable{
 					for (int act_player=0;act_player<PLAYER_COUNT;act_player++) {
 						
 						if (tron_buff[player_position[act_player].x][player_position[act_player].y]!=-1)
-							init();
+							kill_player(act_player);
 						
 						tron_buff[player_position[act_player].x][player_position[act_player].y]=act_player;
 						
@@ -159,14 +193,14 @@ public class TronView extends View implements Runnable{
 							if (player_position[act_player].x<buff_width-1)
 								player_position[act_player].x++;
 							else
-								init();
+								kill_player(act_player);
 							break;
 							
 						case PLAYER_MOVEMENT_LEFT:
 							if (player_position[act_player].x>0)
 								player_position[act_player].x--;
 							else
-								init();
+								kill_player(act_player);
 							break;
 							
 
@@ -174,14 +208,14 @@ public class TronView extends View implements Runnable{
 							if (player_position[act_player].y<buff_height-1)
 								player_position[act_player].y++;
 							else
-								init();
+								kill_player(act_player);
 							break;
 
 						case PLAYER_MOVEMENT_UP:
 							if (player_position[act_player].y>0)
 								player_position[act_player].y--;
 							else
-								init();
+								kill_player(act_player);
 							break;
 						}
 					}
