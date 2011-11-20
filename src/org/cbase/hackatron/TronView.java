@@ -66,6 +66,11 @@ public class TronView extends View implements Runnable{
 
 		tron_buff=new int[buff_width][buff_height];
 
+			
+		super.onSizeChanged(w, h, oldw, oldh);
+	}
+
+	private void init() {
 		for(int x=0;x<buff_width;x++)
 			for(int y=0;y<buff_height;y++)
 				tron_buff[x][y]=-1;
@@ -73,10 +78,8 @@ public class TronView extends View implements Runnable{
 		
 		player_position[0].x=buff_width/20;
 		player_position[0].y=buff_width/20;
-		
-		super.onSizeChanged(w, h, oldw, oldh);
 	}
-
+	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		Log.i("hackatron","key event");
@@ -103,6 +106,8 @@ public class TronView extends View implements Runnable{
 				if (tron_buff[x][y]!=-1)
 					canvas.drawRect(new Rect(x*divider,y*divider,(x+1)*divider,(y+1)*divider),player_paint[tron_buff[x][y]]);
 		
+		
+		
 		super.onDraw(canvas);
 		try {
 			Thread.sleep(20);
@@ -118,28 +123,39 @@ public class TronView extends View implements Runnable{
 				if (buff_width!=0)
 					for (int act_player=0;act_player<PLAYER_COUNT;act_player++) {
 						
+						if (tron_buff[player_position[act_player].x][player_position[act_player].y]!=-1)
+							init();
+						
 						tron_buff[player_position[act_player].x][player_position[act_player].y]=act_player;
 						
 						switch (act_player_movement[act_player]) {
 						case PLAYER_MOVEMENT_RIGHT:
 							if (player_position[act_player].x<buff_width-1)
 								player_position[act_player].x++;
+							else
+								init();
 							break;
 							
 						case PLAYER_MOVEMENT_LEFT:
 							if (player_position[act_player].x>0)
 								player_position[act_player].x--;
+							else
+								init();
 							break;
 							
 
 						case PLAYER_MOVEMENT_DOWN:
 							if (player_position[act_player].y<buff_height-1)
 								player_position[act_player].y++;
+							else
+								init();
 							break;
 
 						case PLAYER_MOVEMENT_UP:
 							if (player_position[act_player].y>0)
 								player_position[act_player].y--;
+							else
+								init();
 							break;
 						}
 					}
