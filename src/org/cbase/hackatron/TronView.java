@@ -29,6 +29,8 @@ public class TronView extends View implements Runnable{
 	private Point[] player_position;
 	private Paint[] player_paint;
 	
+	private boolean[] player_active;
+	
 	private int[][] tron_buff;
 	
 	private int buff_width=0;
@@ -43,13 +45,14 @@ public class TronView extends View implements Runnable{
 		
 		player_position=new Point[PLAYER_COUNT];
 		player_paint=new Paint[PLAYER_COUNT];
+		player_active=new boolean[PLAYER_COUNT];
+		
 		player_position[1]=new Point(0,0);
-		
-		
 		
 		for (int act_player=0;act_player<PLAYER_COUNT;act_player++) {
 			player_position[act_player]=new Point(0,0);
 			player_paint[act_player]=new Paint();
+			player_active[act_player]=false;
 		}
 
 		player_paint[0].setColor(Color.RED);
@@ -61,6 +64,7 @@ public class TronView extends View implements Runnable{
 		act_player_movement=new byte[PLAYER_COUNT];
 		
 		new Thread(this).start();
+		
 	}
 
 	@Override
@@ -70,6 +74,7 @@ public class TronView extends View implements Runnable{
 
 		tron_buff=new int[buff_width][buff_height];
 
+		init();
 			
 		super.onSizeChanged(w, h, oldw, oldh);
 	}
@@ -145,11 +150,44 @@ public class TronView extends View implements Runnable{
 			case KeyEvent.KEYCODE_DPAD_LEFT:
 				act_player_movement[0]=(byte)((act_player_movement[0]+4-1)%4);
 				break;
-			case KeyEvent.KEYCODE_A:
+			case KeyEvent.KEYCODE_DPAD_CENTER:
+				player_active[0]=true;
+				break;
+			
+			case KeyEvent.KEYCODE_X:
 				act_player_movement[1]=(byte)((act_player_movement[1]+1)%4);
 				break;
-			case KeyEvent.KEYCODE_D:
+
+			case KeyEvent.KEYCODE_V:
 				act_player_movement[1]=(byte)((act_player_movement[1]+4-1)%4);
+				break;
+			
+			case KeyEvent.KEYCODE_C:
+				player_active[1]=true;
+				break;
+
+			case KeyEvent.KEYCODE_W:
+				act_player_movement[2]=(byte)((act_player_movement[2]+1)%4);
+				break;
+
+			case KeyEvent.KEYCODE_R:
+				act_player_movement[2]=(byte)((act_player_movement[2]+4-1)%4);
+				break;
+			
+			case KeyEvent.KEYCODE_E:
+				player_active[2]=true;
+				break;
+				
+			case KeyEvent.KEYCODE_I:
+				act_player_movement[3]=(byte)((act_player_movement[3]+1)%4);
+				break;
+
+			case KeyEvent.KEYCODE_P:
+				act_player_movement[3]=(byte)((act_player_movement[3]+4-1)%4);
+				break;
+			
+			case KeyEvent.KEYCODE_O:
+				player_active[3]=true;
 				break;
 			}
 			break;
@@ -181,7 +219,8 @@ public class TronView extends View implements Runnable{
 		while (running) {
 			try {
 				if (buff_width!=0)
-					for (int act_player=0;act_player<PLAYER_COUNT;act_player++) {
+					for (int act_player=0;act_player<PLAYER_COUNT;act_player++)
+						if (player_active[act_player]){
 						
 						if (tron_buff[player_position[act_player].x][player_position[act_player].y]!=-1)
 							kill_player(act_player);
@@ -191,10 +230,10 @@ public class TronView extends View implements Runnable{
 						switch (act_player_movement[act_player]) {
 						case PLAYER_MOVEMENT_RIGHT:
 							if (player_position[act_player].x<buff_width-1)
-								player_position[act_player].x++;
-							else
-								kill_player(act_player);
-							break;
+									player_position[act_player].x++;
+								else
+									kill_player(act_player);
+								break;
 							
 						case PLAYER_MOVEMENT_LEFT:
 							if (player_position[act_player].x>0)
