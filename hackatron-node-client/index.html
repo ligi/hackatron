@@ -1,0 +1,36 @@
+<!doctype hmtl>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>hackatron websocket</title>
+</head>
+<body>
+	<form id="join_form">
+		<input type="text" id="username" placeholder="Username">
+		<button type="submit" id="send_username">join</button>
+	</form>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var socket = io.connect('http://localhost');
+		function begin (e) {
+			e.preventDefault();
+			var username = document.getElementById('username').value;
+			var mvcommands = {
+				'37': '1',
+				'39': '2'
+			};
+			console.log('ready, joining: ' + username);
+			socket.emit('join', username);
+			document.addEventListener('keydown', function (e) {
+				if (!!mvcommands[e.which]) {
+					console.log('sending move command: ' + mvcommands[e.which]);
+					socket.emit('move', mvcommands[e.which]);
+				}
+			});
+			document.getElementById('join_form').removeEventListener('submit', begin);
+		}
+		socket.on('ready', function (data) {
+			document.getElementById('join_form').addEventListener('submit', begin);
+		});
+	</script>
+</body>
