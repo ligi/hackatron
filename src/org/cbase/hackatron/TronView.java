@@ -1,5 +1,10 @@
 package org.cbase.hackatron;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +34,23 @@ public class TronView extends View implements Runnable {
 	private boolean running =true;
 
 	private Paint mPlayerPaint;
+	
+	public String getLocalIpAddress() {
+	    try {
+	        for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+	            NetworkInterface intf = en.nextElement();
+	            for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+	                InetAddress inetAddress = enumIpAddr.nextElement();
+	                if (!inetAddress.isLoopbackAddress()) {
+	                    return inetAddress.getHostAddress().toString();
+	                }
+	            }
+	        }
+	    } catch (SocketException ex) {
+	    //    Log.e(LOG_TAG, ex.toString());
+	    }
+	    return null;
+	}
 	
 	public TronView(Context context) {
 		super(context);
@@ -228,10 +250,18 @@ public class TronView extends View implements Runnable {
 		mPlayerPaint.setTextAlign(Align.RIGHT);
 		mPlayerPaint.setColor(Color.YELLOW);
 		
-		canvas.drawText(getPlayer(0).getName(), this.getWidth()-100,100, mPlayerPaint);
+		canvas.drawText(getPlayer(1).getName(), this.getWidth()-100,100, mPlayerPaint);
+		
+		
 		
 		canvas.drawBitmap(center_logo, (this.getWidth() - center_logo.getWidth()) / 2, (this.getHeight() - center_logo.getHeight()) / 2, new Paint());
+		
+		Paint ip_text_paint=new Paint();
+		ip_text_paint.setColor(Color.WHITE);
+		canvas.drawText("connect to"+this.getLocalIpAddress(), (this.getWidth() - center_logo.getWidth()) / 2, (this.getHeight() - 2*center_logo.getHeight()) / 2, ip_text_paint);
+		
 		for(int x=0;x<buff_width;x++)
+		
 			for(int y=0;y<buff_height;y++) {
 				int val=tron_buff[x][y];
 				if (val!=-1)
