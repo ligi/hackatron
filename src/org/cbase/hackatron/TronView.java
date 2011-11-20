@@ -25,9 +25,9 @@ public class TronView extends View implements Runnable {
 
 	private static int[][] CONTROLS = {
 			{KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_CENTER},
-			{KeyEvent.KEYCODE_X, KeyEvent.KEYCODE_V, KeyEvent.KEYCODE_C},
-			{KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_R, KeyEvent.KEYCODE_E},
-			{KeyEvent.KEYCODE_I, KeyEvent.KEYCODE_P, KeyEvent.KEYCODE_O},
+			{KeyEvent.KEYCODE_V, KeyEvent.KEYCODE_X, KeyEvent.KEYCODE_C},
+			{KeyEvent.KEYCODE_R, KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_E},
+			{KeyEvent.KEYCODE_P, KeyEvent.KEYCODE_I, KeyEvent.KEYCODE_O},
 			};
 
 	private Player[] players;
