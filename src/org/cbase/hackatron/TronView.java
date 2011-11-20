@@ -181,7 +181,12 @@ public class TronView extends View implements Runnable{
 	public void player_left(int player) {
 		act_player_movement[player]=(byte)((act_player_movement[player]+4-1)%4);
 	}
+
 	
+	public void player_start(int player) {
+		player_active[player]=true;
+	}
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		Log.i("hackatron","key event");

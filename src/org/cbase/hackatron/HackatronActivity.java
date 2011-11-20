@@ -13,7 +13,8 @@ import android.util.Log;
 
 public class HackatronActivity extends Activity {
     
-
+	int act_player_slot=0;
+	
 	public static final int PORT = 4225;
 	
 	private class ServerTask extends AsyncTask<Void, Void, Void> {
@@ -57,6 +58,7 @@ public class HackatronActivity extends Activity {
 
 		private String username = "user";
 		private boolean ready = false;
+		private int mySlot=0;
 		
 		@Override
 		protected Void doInBackground(Socket... params) {
@@ -85,20 +87,25 @@ public class HackatronActivity extends Activity {
 			final String l = values[0];
 			if (l.startsWith("join ")) {
 				username = l.substring(4);
+				
+				mySlot=act_player_slot;
+				act_player_slot=(act_player_slot+1)%4;
+				
 				if (l.length() > 20) {
 					cancel(true);
 				}
 				Log.d("hackatron", "got username: " + username);
 				
 			} else if (l.equals("1")) {
-				Log.d("hackatron", username + " goes left");
-				tv.player_left(0);
+				Log.d("hackatron",  username +"@"+ mySlot + " goes left");
+				tv.player_left(mySlot);
 			} else if (l.equals("2")) {
-				tv.player_right(0);
-				Log.d("hackatron", username + " goes right");
+				tv.player_right(mySlot);
+				Log.d("hackatron",  username +"@"+ mySlot +" goes right");
 			} else if (l.equals("3")) {
+				tv.player_start(mySlot);
 				ready = true;
-				Log.d("hackatron", username + " is ready");
+				Log.d("hackatron", username +"@"+ mySlot + " is ready");
 			}
 		}
 		
