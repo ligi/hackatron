@@ -215,25 +215,25 @@ public class TronView extends View implements Runnable {
 					textX = this.getWidth()-100;
 					break;
 				case 2:
-					align = Align.RIGHT;
-					textX = this.getWidth()-100;
+					align = Align.LEFT;
+					//textX = 100;
 					textY = this.getHeight() - this.getHeight()/30 - 100;
 					break;
 				case 3:
-					align = Align.LEFT;
+					align = Align.RIGHT;
 					textX = this.getWidth()-100;
 					textY = this.getHeight() - this.getHeight()/30 - 100;
 					break;
 			}
 			mPlayerPaint.setTextAlign(align);
-			canvas.drawText(p.getName() + " " + player, textX, textY,mPlayerPaint);
+			canvas.drawText(p.getName() , textX, textY,mPlayerPaint);
 		}
 
 		canvas.drawBitmap(center_logo, (this.getWidth() - center_logo.getWidth()) / 2, (this.getHeight() - center_logo.getHeight()) / 2, new Paint());
 		
 		Paint ip_text_paint=new Paint();
 		ip_text_paint.setColor(Color.WHITE);
-		canvas.drawText("connect to"+this.getLocalIpAddress(), (this.getWidth() - center_logo.getWidth()) / 2, (this.getHeight() - 2*center_logo.getHeight()) / 2, ip_text_paint);
+		//canvas.drawText("connect to"+this.getLocalIpAddress(), (this.getWidth() - center_logo.getWidth()) / 2, (this.getHeight() - 2*center_logo.getHeight()) / 2, ip_text_paint);
 		
 		for(int x=0;x<buff_width;x++)
 		
@@ -265,10 +265,14 @@ public class TronView extends View implements Runnable {
 
 							int x = player.getPoint().x;
 							int y = player.getPoint().y;
-						if (tron_buff[x][y]!=-1)
-							kill_player(act_player);
-
-						tron_buff[x][y]=act_player;
+		
+							
+							
+							if (tron_buff[x][y]!=-1)
+								kill_player(act_player);
+							else
+								tron_buff[x][y]=act_player;
+						
 
 						switch (player.getMovement()) {
 						case RIGHT:
