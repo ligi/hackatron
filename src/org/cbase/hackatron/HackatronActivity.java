@@ -89,10 +89,12 @@ public class HackatronActivity extends Activity {
 					cancel(true);
 				}
 				Log.d("hackatron", "got username: " + username);
-				//tv.
+				
 			} else if (l.equals("1")) {
 				Log.d("hackatron", username + " goes left");
+				tv.player_left(0);
 			} else if (l.equals("2")) {
+				tv.player_right(0);
 				Log.d("hackatron", username + " goes right");
 			} else if (l.equals("3")) {
 				ready = true;
