@@ -1,8 +1,11 @@
 package org.cbase.hackatron;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -12,6 +15,32 @@ import android.view.View;
 
 public class TronView extends View implements Runnable{
 
+
+	public static Bitmap relative2View(View view,Bitmap orig, float x_scale_, float y_scale_) {
+		// create a matrix for the manipulation
+		Matrix matrix = new Matrix();
+		
+		float x_scale, y_scale;
+		if (y_scale_ != 0f)
+			// take the given y scale
+			y_scale = (view.getHeight() * y_scale_) / orig.getHeight();
+		else
+			// take x_scale
+			y_scale = (view.getWidth() * x_scale_) / orig.getWidth();
+
+		if (x_scale_ != 0f)
+			// take the given x scale
+			x_scale = (view.getWidth() * x_scale_) / orig.getWidth();
+		else
+			// take the given y scale
+			x_scale = (view.getHeight() * y_scale_) / orig.getHeight();
+
+		matrix.postScale(x_scale, y_scale);
+		
+		return Bitmap.createBitmap(orig, 0, 0, orig.getWidth(),orig.getHeight(), matrix, true);
+	}
+	
+	private Bitmap center_logo;
 	
 	public final static byte PLAYER_COUNT=4;
 	
@@ -38,6 +67,8 @@ public class TronView extends View implements Runnable{
 	
 	private boolean running =true;
 		
+	private Paint logo_paint=new Paint();
+	
 	public TronView(Context context) {
 		super(context);
 		
@@ -63,12 +94,16 @@ public class TronView extends View implements Runnable{
 		
 		act_player_movement=new byte[PLAYER_COUNT];
 		
+	
 		new Thread(this).start();
 		
 	}
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		
+		
+		center_logo=relative2View(this,BitmapFactory.decodeResource(this.getResources(),R.drawable.logo),0.7f,0.0f);
 		buff_width=w/divider;
 		buff_height=h/divider;
 
@@ -198,6 +233,9 @@ public class TronView extends View implements Runnable{
 	@Override
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.BLACK);
+		
+		
+		canvas.drawBitmap(center_logo, (this.getWidth()-center_logo.getWidth())/2, (this.getHeight()-center_logo.getHeight())/2, new Paint());
 		for(int x=0;x<buff_width;x++)
 			for(int y=0;y<buff_height;y++) {
 				int val=tron_buff[x][y];
