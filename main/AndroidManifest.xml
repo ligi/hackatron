@@ -24,10 +24,21 @@
             >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+         <activity android:name=".HackatronNOIFActivity"
+             android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen"
+            >
+            <intent-filter >
+         		<action android:name="org.cbase.hackatron.NOIF"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+         </activity>
+             
     </application>
+    
+    
+    
 
 </manifest>

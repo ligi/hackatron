@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 public class HackatronActivity extends Activity {
     
@@ -127,17 +128,24 @@ public class HackatronActivity extends Activity {
 	
 	private TronView tv;
 	
+	
+	public int getLayout() {
+		return R.layout.plain;
+	}
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(getLayout());
+        
+        LinearLayout ll=(LinearLayout)this.findViewById(R.id.container_for_tron);
         
         serverTask.execute();
         
         tv=new TronView(this);
         tv.setFocusable(true);
-        setContentView(tv);
-       
+        //setContentView(tv);
+        ll.addView(tv);
     }
 	
 	@Override
