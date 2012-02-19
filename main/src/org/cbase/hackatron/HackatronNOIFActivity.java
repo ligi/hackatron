@@ -6,7 +6,7 @@ import android.widget.ProgressBar;
 
 public class HackatronNOIFActivity extends HackatronActivity {
 
-	public final static int PAUSE_TIME=3000000; // in ms
+	public final static int PAUSE_TIME=120000; // in ms
 	private ProgressBar progress;
 	private long pause_start;
 	private Handler hndl;
