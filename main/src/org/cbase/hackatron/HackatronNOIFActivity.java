@@ -14,8 +14,7 @@ public class HackatronNOIFActivity extends HackatronActivity {
 	public int getLayout() {
 		return R.layout.noif;
 	}
-	
-	
+		
 
     @Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -27,7 +26,13 @@ public class HackatronNOIFActivity extends HackatronActivity {
         pause_start=System.currentTimeMillis();
         
         hndl=new Handler();
-        
+	}
+
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+        pause_start=System.currentTimeMillis();
         new Thread(new ProgressUpdaterThread()).start();
 	}
 
